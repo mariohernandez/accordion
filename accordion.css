@@ -1,0 +1,85 @@
+/* Basic custom properties. Not required but if the plan is to use them,
+it's better to declare them within the accordion component to reduce scope. */
+.accordion {
+  --background: #fff;
+  --padding: 1rem;
+  --shadow: 0 5px 8px -5px rgb(0 0 0 / 10%),
+		0 5px 6px -5px rgb(0 0 0 / 4%);
+
+  /* Adds consistent spacing between each details element. */
+  > * + * {
+    border-block-start: 1px solid #ededed;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Wrapper of each accordion item. */
+  details {
+    background: var(--background);
+    box-shadow: var(--shadow);
+    inline-size: 100%;
+    interpolate-size: allow-keywords; /* Allows transitions for height auto. */
+    margin: 1px auto;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    /* A CSS pseudo-element to directly target and style the <details> expandable content. */
+    &::details-content {
+      opacity: 0;
+      block-size: 0;
+      overflow-y: hidden;
+      /* Content-visibility with allow-discrete keep content visible during transition */
+      transition: content-visibility 0.4s allow-discrete,
+                  opacity 0.4s,
+                  block-size 0.4s;
+      border-block-start: 1px solid transparent;
+      cursor: default;
+      font-weight: 300;
+    }
+
+    /* When details is open, increase opacity to view content. */
+    &[open]::details-content {
+      block-size: auto; /* Animate to auto height */
+      opacity: 1;
+    }
+
+    /* When details is open, change the plus sign to minus. */
+    &[open] summary::after {
+      content: "\2013";
+    }
+
+    /* Hides default details marker in Safari. */
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  summary {
+    align-items: center;
+    list-style: none; /* Hides default marker in all browsers except Safari. */
+    display: flex;
+    flex-direction: row;
+    font-size: 1.2rem;
+    font-weight: bold;
+    justify-content: space-between;
+    padding: var(--padding);
+
+    /* Using ::after for the plus and minus symbol. */
+    &::after {
+      align-items: center;
+      content: '\002B';
+      display: flex;
+      font-size: 1.5rem;
+      font-weight: normal;
+      inline-size: 1.6rem;
+      justify-content: center;
+    }
+  }
+
+  .accordion__content {
+    padding: calc(var(--padding) * 2);
+    padding-block-start: 0;
+  }
+}
